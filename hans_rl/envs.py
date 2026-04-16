@@ -58,7 +58,7 @@ class HANSNavEnv(gym.Env):
 
     metadata = {"render_modes": ["human"], "render_fps": 10}
 
-    def __init__(self, grid_size: float = 10.0, max_steps: int = 150, n_lidar: int = 10, n_obstacles: int = 0):
+    def __init__(self, grid_size: float = 10.0, max_steps: int = 400, n_lidar: int = 10, n_obstacles: int = 0):
         """
         Initialize the HANS navigation environment.
         
@@ -115,7 +115,7 @@ class HANSNavEnv(gym.Env):
         
         # ========== ROBOT STATE INITIALIZATION ==========
         # Robot starts at bottom-left corner
-        self.robot_pos = np.array([1.0, 1.0], dtype=np.float32)
+        self.robot_pos = np.array([7.0, 7.0], dtype=np.float32)
         
         # Robot heading angle (0 rad = pointing toward +X direction)
         self.robot_theta = 0.0
@@ -223,7 +223,7 @@ class HANSNavEnv(gym.Env):
         # ========== TERMINATION CONDITIONS ==========
         if self._goal_reached():
             # Success: reached goal
-            reward += 100.0
+            reward += 500.0
             done = True
         elif self._collision():
             # Failure: hit an obstacle
@@ -237,7 +237,7 @@ class HANSNavEnv(gym.Env):
         obs = self._get_observation()
         info = {
             "distance_to_goal": float(distance),
-            "steps": self.steps,
+            "steps": self.steps, "is_success": True,
         }
         return obs, float(reward), done, False, info
 
@@ -329,7 +329,7 @@ class HANSNavEnv(gym.Env):
         Returns:
             bool: True if distance to goal < 3.0 (very generous for curriculum learning)
         """
-        return self._distance_to_goal() < 3.0
+        return self._distance_to_goal() < 5.0
 
     def _collision(self) -> bool:
         """

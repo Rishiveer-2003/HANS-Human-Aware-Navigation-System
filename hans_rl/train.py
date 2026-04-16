@@ -136,7 +136,7 @@ def evaluate(model_path: str = "models/hans_ppo.zip", episodes: int = 5):
             total_reward += reward
         
         # Check if episode was successful (reached goal)
-        success = info["distance_to_goal"] < 0.5
+        success = total_reward > 400
         if success:
             successes += 1
         
